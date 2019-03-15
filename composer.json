@@ -7,7 +7,6 @@
     "modules",
     "cronjob"
   ],
-  "version": "0.0.1",
   "homepage": "https://www.seipp.com",
   "license": [
     "GPL-3.0-only"
