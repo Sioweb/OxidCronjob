@@ -39,7 +39,6 @@ class Cronjob extends FrontendController
         }
 
         $this->cronFinished($view);
-        die('Everything cronned!');
     }
 
     protected function cronFinished($view)
