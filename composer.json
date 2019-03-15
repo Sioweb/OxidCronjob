@@ -1,0 +1,30 @@
+{
+  "name": "sioweb/oxid-cronjob",
+  "description": "A cronjob entrypoint for oxid",
+  "type": "oxideshop-module",
+  "keywords": [
+    "oxid",
+    "modules",
+    "cronjob"
+  ],
+  "homepage": "https://www.seipp.com",
+  "license": [
+    "GPL-3.0-only"
+  ],
+  "extra": {
+    "oxideshop": {
+      "blacklist-filter": [
+        "documentation/**/*.*"
+      ],
+      "target-directory": "sioweb/Cronjob"
+    }
+  },
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sioweb\\Oxid\\Cronjob\\": "../../../source/modules/sioweb/Cronjob/"
+    }
+  }
+}
