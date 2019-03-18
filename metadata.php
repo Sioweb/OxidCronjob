@@ -10,7 +10,7 @@ $sMetadataVersion = '2.0';
  */
 $aModule = [
     'id' => 'SiowebOxidCronjob',
-    'title' => '<b style="color: #005ba9">Sioweb</b> | Cronjobs',
+    'title' => '<i></i><b style="color: #005ba9">Sioweb</b> | Cronjobs',
     'description' => 'Zugriffspunkte für Cronjobs definieren. Rufen Sie yourdomain.tld?cl=swexeccrons auf, um die Cronjobs auszuführen.',
     'version' => '1.0',
     'url' => 'https://www.sioweb.de',
