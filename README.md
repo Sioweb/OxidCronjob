@@ -2,6 +2,8 @@
 
 Dieses Modul stellt einen zentralen Entrypoint für Cronjobs zur Verfügung. Module für Oxid 6 können durch dieses Modul in der Datei `metadata.php` `cronjobs` konfigurieren. Diese müssen wie Controller ab `$sMetadataVersion = "2.0"` notiert werden.
 
+**Hinweis:** Cronjobs, müssen auf einem Server, oder Rechner, eingerichtet werden. Der Cronjob muss dann die URL https://yourdomain.tld?cl=swexeccrons aufrufen.
+
 ## Für wen ist dieses Modul?
 
 Dieses Modul ist ein Helfer für Modulentwickler, die einen Controller anbieten wollen, der regelmäßig aufgerufen werden soll. Sollte ein Kunde/Anwender mehrere Module einsetzen, die regelmäßig aufgerufene Controller enthalten, muss nur noch ein Cronjob auf dem Server eingerichtet werden.
