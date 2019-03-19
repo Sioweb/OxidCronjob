@@ -29,11 +29,16 @@ class Cronjob extends FrontendController
     public function init()
     {
         $this->output = [];
+        $view = null;
         $ProviderStorage = new CronjobClassProviderStorage;
         $CronjobClasses = $ProviderStorage->get();
         foreach ($CronjobClasses as $ModuleId => $Classes) {
             foreach ($Classes as $CronjobKey => $CronjobClass) {
-                $view = $this->_initializeCronjobObject($CronjobKey, null);
+                $_view = $this->_initializeCronjobObject($CronjobKey, null);
+                if($_view !== null) {
+                    $view = $_view;
+                    unset($_view);
+                }
                 $this->outputCron($CronjobKey, $CronjobClass, $view);
             }
         }
@@ -43,20 +48,6 @@ class Cronjob extends FrontendController
 
     protected function cronFinished($view)
     {
-        $config = $this->getConfig();
-
-        $outputManager = $this->_getCronOutputManager();
-        $outputManager->setCharset($view->getCharSet());
-
-        if ($config->getRequestParameter('renderPartial')) {
-            $outputManager->setOutputFormat(Output::OUTPUT_FORMAT_JSON);
-            $outputManager->output('errors', $this->_getFormattedErrors($view->getClassName()));
-        }
-        $outputManager->sendHeaders();
-        $this->sendAdditionalHeaders($view);
-        $outputManager->output('content', $this->finalizeOutput($this->output));
-        $config->pageClose();
-        $outputManager->flushOutput();
     }
 
     protected function finalizeOutput($output)
