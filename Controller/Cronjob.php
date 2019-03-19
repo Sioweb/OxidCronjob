@@ -39,14 +39,16 @@ class Cronjob extends FrontendController
                     $view = $_view;
                     unset($_view);
                 }
+                echo '<p>Execute ' . $CronjobClass . '</p>';
                 $this->outputCron($CronjobKey, $CronjobClass, $view);
             }
         }
 
-        $this->cronFinished($view);
+        $this->cronFinished($view, $CronjobClasses);
+        die('All crons done!');
     }
 
-    protected function cronFinished($view)
+    protected function cronFinished($view, $CronjobClasses)
     {
     }
 
