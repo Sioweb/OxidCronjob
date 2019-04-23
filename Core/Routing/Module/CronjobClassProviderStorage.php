@@ -93,6 +93,10 @@ class CronjobClassProviderStorage implements ClassProviderStorageInterface
     private function cronjobKeysToLowercase($cronjobs)
     {
         $result = [];
+        
+        if (empty($cronjobs)) {
+            return $result;
+        }
 
         foreach ($cronjobs as $cronjobKey => $cronjobClass) {
             $result[strtolower($cronjobKey)] = $cronjobClass;
