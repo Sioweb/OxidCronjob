@@ -10,9 +10,36 @@ Dieses Modul ist ein Helfer für Modulentwickler, die einen Controller anbieten 
 
 **Warnung:** Bei zu großen Datenmengen, kann es sein, dass der Cronjob nicht vollständig ausgeführt wird.
 
-## Anwendungsbeispiel
+## Zwei Arten von Cronjobs
 
+### Schedule
+
+Scheduled Cronjobs können im Backend unter Service > Cronjob eingerichtet werden und sind sehr viel dynamischer als `Executables`. Ein Cronjob des Servers - oder eines externen Servers, könnte nun jede Minute den Shop aufrufen: https://dein-shop.tld?cl=swshedulecrons
+
+Das Modul lädt dann alle eingerichteten Cronjobs aus der Tabelle `sio_cronjob` die älter sind als zum Zeitpunk des Aufrufen und führt die Cronjobs aus. Als Beispiel wollen wir einen Cronjob der alle fünf Minuten ausgeführt wird, dazu wird im Backend folgender Cronjob hinterlegt:
+
+    Cronjob ID: test
+    Minute: /5
+    Stunde: *
+    Tag: *
+    Monat: *
+    Wochentag: *
+    
+Ein Modul kann nun einen `test::` Cronjob registrieren:
+
+```php
+$aModule = [
+    'cronjob' => [
+        'test::ein_eindeutiger_name' => Name\Space\Zu\Deinem\Controller\ControllerKlassenName::class
+    ]
+];
 ```
+
+### Executable
+
+In der ersten Version dieses Modules, waren Cronjobs ledigliche eine Gruppe von registrierbaren Klassen, welche nacheinander aufgerufen und ausgeführt wurden. Diese Cronjobs können via URL `?cl=swexeccrons` im Frontend ausgeführt werden. Alle Cronjobs die nach dem folgendem Muster registriert wurden, werden ausgeführt:
+
+```php
 $aModule = [
     'cronjob' => [
         'ein_eindeutiger_name' => Name\Space\Zu\Deinem\Controller\ControllerKlassenName::class
@@ -20,7 +47,7 @@ $aModule = [
 ];
 ```
 
-Eure Klasse muss mindestens die öffentliche Funktion init() {} enthalten und sollte von FontendController erben.
+**Hinweis:** Eure Klasse muss mindestens die öffentliche Funktion init() {} enthalten und muss von FontendController erben oder muss alle für eine Frontendausgabe nötigen Methoden besitzen.
 
 ```
 <?php
