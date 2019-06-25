@@ -78,3 +78,11 @@ Als Abhängigkeit:
   }
 }
 ```
+
+## Dein Modul braucht einen Cronjob?
+
+Dann füge `sioweb/oxid-cronjob` als Composer-Abhängigkeit zu deinem Modul hinzu. Über das Oxid-Event `onActivate` kannst du deinen Cronjob in die Tabelle `sio_cronjob` einfügen. **Achtung:** Es kann sein, dass der Endbenutzer das Cronjob-Modul nicht aktiviert hat, daher rate ich dazu die Tabelle `sio_cronjob` in deinem Event ebenfalls zu installieren. Kopiere dazu einfach den Inhalt aus der [onActivate-Methode](https://github.com/Sioweb/OxidCronjob/blob/master/Core/Events.php#L9) den Cronjob-Modules.
+
+Weise den Benutzer darauf hin, dass das Cronjob-Modul unbedingt aktiviert sein muss, damit dein Cronjob ausgeführt wird.
+
+Benenne den Cronjob am besten wie folgt: `Modulname::Vendorname_Modulname_Cronjobname`. Die Cronjob ID muss dann ebenfalls `Modulname` heißen, die bezeichnung nach den beiden Doppelpunkten ist frei wählbar, muss aber unique sein.
