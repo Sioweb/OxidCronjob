@@ -8,8 +8,6 @@ Dieses Modul stellt einen zentralen Entrypoint für Cronjobs zur Verfügung. Mod
 
 Dieses Modul ist ein Helfer für Modulentwickler, die einen Controller anbieten wollen, der regelmäßig aufgerufen werden soll. Sollte ein Kunde/Anwender mehrere Module einsetzen, die regelmäßig aufgerufene Controller enthalten, muss nur noch ein Cronjob auf dem Server eingerichtet werden.
 
-**Warnung:** Bei zu großen Datenmengen, kann es sein, dass der Cronjob nicht vollständig ausgeführt wird.
-
 ## Zwei Arten von Cronjobs
 
 ### Schedule
@@ -28,6 +26,8 @@ Das Modul lädt dann alle eingerichteten Cronjobs aus der Tabelle `sio_cronjob` 
 Ein Modul kann nun einen `test::` Cronjob registrieren:
 
 ```php
+<?php
+
 $aModule = [
     'cronjob' => [
         'test::ein_eindeutiger_name' => Name\Space\Zu\Deinem\Controller\ControllerKlassenName::class
@@ -40,6 +40,8 @@ $aModule = [
 In der ersten Version dieses Modules, waren Cronjobs ledigliche eine Gruppe von registrierbaren Klassen, welche nacheinander aufgerufen und ausgeführt wurden. Diese Cronjobs können via URL `?cl=swexeccrons` im Frontend ausgeführt werden. Alle Cronjobs die nach dem folgendem Muster registriert wurden, werden ausgeführt:
 
 ```php
+<?php
+
 $aModule = [
     'cronjob' => [
         'ein_eindeutiger_name' => Name\Space\Zu\Deinem\Controller\ControllerKlassenName::class
@@ -49,7 +51,7 @@ $aModule = [
 
 **Hinweis:** Eure Klasse muss mindestens die öffentliche Funktion init() {} enthalten und muss von FontendController erben oder muss alle für eine Frontendausgabe nötigen Methoden besitzen.
 
-```
+```php
 <?php
 
 namespaceName\Space\Zu\Deinem\Controller;
@@ -62,6 +64,8 @@ class ControllerKlassenName extends FrontendController {
 }
 ```
 
+**Warnung:** Bei zu großen Datenmengen, kann es sein, dass der Cronjob nicht vollständig ausgeführt wird.
+
 ## Installation
 
 Die Installation erfolg via Composer. Es kann von Hand, oder durch die Abhängigkeitsangabe eines Modules in der composer.json installiert werden:
@@ -70,7 +74,7 @@ Von Hand: `composer req sioweb/oxid-cronjob`.
 
 Als Abhängigkeit:
 
-```
+```json
 {
   "name": "dein/modul",
   "require": {
