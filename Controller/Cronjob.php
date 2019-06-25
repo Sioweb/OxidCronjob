@@ -4,13 +4,18 @@ namespace Sioweb\Oxid\Cronjob\Controller;
 
 use ReflectionMethod;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
-use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\TableViewNameGenerator;
+use OxidEsales\Eshop\Core\Registry;
 use Sioweb\Oxid\Cronjob\Core\Routing\CronjobClassNameResolver;
 use OxidEsales\Eshop\Core\Output;
 use Sioweb\Oxid\Cronjob\Core\Routing\Module\CronjobClassProviderStorage;
+
+use Cron\CronExpression;
+
+use OxidEsales\Eshop\Core\Request;
+
+use Sioweb\Oxid\Cronjob\Model\Cronjob as CronjobModel;
 
 class Cronjob extends FrontendController
 {
@@ -28,12 +33,63 @@ class Cronjob extends FrontendController
 
     public function init()
     {
+        switch($_GET['cl']) {
+            case 'swshedulecrons':
+                $this->shedule();
+            break;
+            case 'swexeccrons':
+                $this->exec();
+            break;
+        }
+        
+        die('All crons done!');
+    }
+
+    protected function shedule()
+    {
+        $Cronjobs = oxNew(CronjobModel::class);
+
+        $Database = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
+
+        $sSelect = "SELECT
+                sio_cronjob.OXID,
+                sio_cronjob.OXTITLE,
+                sio_cronjob.LAST_EXECUTED,
+                concat(sio_cronjob.MINUTE, ' ', sio_cronjob.HOUR, ' ', sio_cronjob.DAY, ' ', sio_cronjob.MONTH, ' ', sio_cronjob.WEEKDAY) AS CronExpression
+            FROM sio_cronjob
+            WHERE sio_cronjob.LAST_EXECUTED <= NOW()
+            ORDER BY sio_cronjob.OXSORT
+        ";
+
+        $rs = $Database->select($sSelect);
+
+        $Update = DatabaseProvider::getDb();
+        if ($rs != false && $rs->count() > 0) {
+            while (!$rs->EOF) {
+                $Fields = $rs->getFields();
+                $cron = CronExpression::factory($Fields['CronExpression']);
+
+                $this->exec(strtolower($Fields['OXTITLE']));
+                
+                $Update->execute("UPDATE sio_cronjob SET LAST_EXECUTED = ? WHERE OXID = ?", [
+                    $cron->getNextRunDate()->format('Y-m-d H:i:s'),
+                    $Fields['OXID']
+                ]);
+                $rs->fetchRow();
+            }
+        }
+    }
+
+    protected function exec($prefix = null)
+    {
         $this->output = [];
         $view = null;
-        $ProviderStorage = new CronjobClassProviderStorage;
-        $CronjobClasses = $ProviderStorage->get();
+        $CronjobClasses = (new CronjobClassProviderStorage)->get();
         foreach ($CronjobClasses as $ModuleId => $Classes) {
             foreach ($Classes as $CronjobKey => $CronjobClass) {
+                if($prefix !== null && strpos($CronjobKey, $prefix) === false) {
+                    continue;
+                }
                 $_view = $this->_initializeCronjobObject($CronjobKey, null);
                 if($_view !== null) {
                     $view = $_view;
@@ -45,7 +101,6 @@ class Cronjob extends FrontendController
         }
 
         $this->cronFinished($view, $CronjobClasses);
-        die('All crons done!');
     }
 
     protected function cronFinished($view, $CronjobClasses)

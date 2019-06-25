@@ -20,7 +20,9 @@
     }
   },
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "cihaeuser/formbuilder": "*",
+    "dragonmantank/cron-expression": "*"
   },
   "autoload": {
     "psr-4": {
