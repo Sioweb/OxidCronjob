@@ -87,9 +87,13 @@ class Cronjob extends FrontendController
         $CronjobClasses = (new CronjobClassProviderStorage)->get();
         foreach ($CronjobClasses as $ModuleId => $Classes) {
             foreach ($Classes as $CronjobKey => $CronjobClass) {
-                if($prefix !== null && strpos($CronjobKey, $prefix) === false) {
+                if(
+                    ($prefix !== null && strpos($CronjobKey, $prefix) === false) ||
+                    ($prefix === null && strpos($CronjobKey, '::') !== false)
+                ) {
                     continue;
                 }
+
                 $_view = $this->_initializeCronjobObject($CronjobKey, null);
                 if($_view !== null) {
                     $view = $_view;
