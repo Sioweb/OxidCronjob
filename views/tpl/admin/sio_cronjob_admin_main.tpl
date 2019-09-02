@@ -50,7 +50,7 @@ function DeletePic( sField )
 <div class="actions">
 [{strip}]
   <ul>
-    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:top.oxid.admin.editThis( -1 );return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEW_ATTACHMENT" }]</a> |</li>
+    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:top.oxid.admin.editThis( -1 );return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEW_CRONJOB" }]</a> |</li>
     [{include file="bottomnavicustom.tpl"}]
 
     [{ if $sHelpURL }]
