@@ -1,13 +1,10 @@
 {
   "name": "sioweb/oxid-cronjob",
   "description": "A cronjob entrypoint for oxid",
-  "type": "oxideshop-module",
-  "keywords": [
-    "oxid",
-    "modules",
-    "cronjob"
-  ],
-  "homepage": "https://www.seipp.com",
+  "type": "oxidkernel-module",
+  "version": "6.0.0",
+  "keywords": ["oxid","modules","cronjob"],
+  "homepage": "https://github.com/Sioweb/OxidCronjob",
   "license": [
     "GPL-3.0-only"
   ],
@@ -16,17 +13,26 @@
       "blacklist-filter": [
         "documentation/**/*.*"
       ],
+      "source-directory": "./src/Resources/oxid",
       "target-directory": "sioweb/Cronjob"
     }
   },
   "require": {
-    "php": ">=7.0",
+    "php": "^7.0",
     "cihaeuser/formbuilder": "*",
-    "dragonmantank/cron-expression": "*"
+    "dragonmantank/cron-expression": "*",
+    "sioweb/ccevent-git": "*",
+    "oxid-community/symfony-kernel": "*"
   },
   "autoload": {
     "psr-4": {
-      "Sioweb\\Oxid\\Cronjob\\": "../../../source/modules/sioweb/Cronjob/"
+      "Sioweb\\Oxid\\Cronjob\\": "src/"
     }
+  },
+  "scripts": {
+    "package-scripts": [
+      "@config.localhost==1",
+      "Sioweb\\CCEvent\\Git\\Composer\\Git::init --repository=https://github.com/Sioweb/OxidCronjob"
+    ]
   }
 }
