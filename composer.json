@@ -2,7 +2,6 @@
   "name": "sioweb/oxid-cronjob",
   "description": "A cronjob entrypoint for oxid",
   "type": "oxidkernel-module",
-  "version": "6.0.0",
   "keywords": ["oxid","modules","cronjob"],
   "homepage": "https://github.com/Sioweb/OxidCronjob",
   "license": [
